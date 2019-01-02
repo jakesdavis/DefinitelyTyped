@@ -1,4 +1,4 @@
-// Type definitions for split.js 1.3
+// Type definitions for split.js 1.5
 // Project: https://github.com/nathancahill/Split.js
 // Definitions by: Ilia Choly <https://github.com/icholy>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -6,83 +6,93 @@
 
 // Global variable outside module loader
 export as namespace Split;
+export default Split;
 
 // Module loader
-export = Split;
+/* export = Split; */
 
 declare function Split(
-  elements: Array<string | HTMLElement>,
-  options?: Split.Options
+    elements: Array<string | HTMLElement>,
+    options?: Split.Options
 ): Split.Instance;
 
 declare namespace Split {
-  type Partial<T> = {[P in keyof T]?: T[P]};
-  type CSSStyleDeclarationPartial = Partial<CSSStyleDeclaration>;
+    type Partial<T> = { [P in keyof T]?: T[P] };
+    type CSSStyleDeclarationPartial = Partial<CSSStyleDeclaration>;
 
-  interface Options {
-    // Initial sizes of each element in percents or CSS values.
-    sizes?: number[];
+    interface Options {
+        // Initial sizes of each element in percents or CSS values.
+        sizes?: number[];
 
-    // Minimum size of each element.
-    minSize?: number | number[];
+        // Minimum size of each element. Default: 100
+        minSize?: number | number[];
 
-    // Gutter size in pixels.
-    gutterSize?: number;
+        // Grow initial sizes to `minSize`. Default: false
+        expandToMin?: boolean;
 
-    // Snap to minimum size offset in pixels.
-    snapOffset?: number;
+        // Gutter size in pixels. Default: 10
+        gutterSize?: number;
 
-    // Direction to split: horizontal or vertical.
-    direction?: 'horizontal' | 'vertical';
+        // Gutter alignment between elements. Default: center
+        gutterAlign?: string;
 
-    // Cursor to display while dragging.
-    cursor?: 'col-resize' | 'row-resize';
+        // Snap to minimum size offset in pixels. Default: 30
+        snapOffset?: number;
 
-    // Callback on drag.
-    onDrag?(): void;
+        // Direction to split: horizontal or vertical. Default: 1
+        dragInterval?: number;
 
-    // Callback on drag start.
-    onDragStart?(): void;
+        // Direction to split: horizontal or vertical.
+        direction?: 'horizontal' | 'vertical';
 
-    // Callback on drag end.
-    onDragEnd?(): void;
+        // Cursor to display while dragging.
+        cursor?: 'col-resize' | 'row-resize';
 
-    // Called to create each gutter element
-    gutter?(
-      index: number,
-      direction: 'horizontal' | 'vertical'
-    ): HTMLElement;
+        // Called to create each gutter element
+        gutter?(
+            index: number,
+            direction: 'horizontal' | 'vertical'
+        ): HTMLElement;
 
-    // Called to set the style of each element.
-    elementStyle?(
-      dimension: 'width' | 'height',
-      elementSize: number,
-      gutterSize: number
-    ): CSSStyleDeclarationPartial;
+        // Called to set the style of each element.
+        elementStyle?(
+            dimension: 'width' | 'height',
+            elementSize: number,
+            gutterSize: number
+        ): CSSStyleDeclarationPartial;
 
-    // Called to set the style of the gutter.
-    gutterStyle?(
-      dimension: 'width' | 'height',
-      gutterSize: number
-    ): CSSStyleDeclarationPartial;
-  }
+        // Called to set the style of the gutter.
+        gutterStyle?(
+            dimension: 'width' | 'height',
+            gutterSize: number
+        ): CSSStyleDeclarationPartial;
 
-  interface Instance {
-    // setSizes behaves the same as the sizes configuration option, passing an array of percents or CSS values.
-    // It updates the sizes of the elements in the split.
-    setSizes(sizes: number[]): void;
+        // Callback on drag.
+        onDrag?(sizes: number[]): void;
 
-    // getSizes returns an array of percents, suitable for using with setSizes or creation.
-    // Not supported in IE8.
-    getSizes(): number[];
+        // Callback on drag start.
+        onDragStart?(sizes: number[]): void;
 
-    // collapse changes the size of element at index to 0.
-    // Every element except the last is collapsed towards the front (left or top).
-    // The last is collapsed towards the back.
-    // Not supported in IE8.
-    collapse(index: number): void;
+        // Callback on drag end.
+        onDragEnd?(sizes: number[]): void;
+    }
 
-    // Destroy the instance. It removes the gutter elements, and the size CSS styles Split.js set.
-    destroy(): void;
-  }
+    interface Instance {
+        // setSizes behaves the same as the sizes configuration option, passing an array of percents or CSS values.
+        // It updates the sizes of the elements in the split.
+        setSizes(sizes: number[]): void;
+
+        // getSizes returns an array of percents, suitable for using with setSizes or creation.
+        // Not supported in IE8.
+        getSizes(): number[];
+
+        // collapse changes the size of element at index to 0.
+        // Every element except the last is collapsed towards the front (left or top).
+        // The last is collapsed towards the back.
+        // Not supported in IE8.
+        collapse(index: number): void;
+
+        // Destroy the instance. It removes the gutter elements, and the size CSS styles Split.js set.
+        destroy(): void;
+    }
 }
